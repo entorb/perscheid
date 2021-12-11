@@ -51,7 +51,7 @@ with open(file_csv, mode="r", encoding="utf-8") as fh:
             "A-Nummern": row["A-Nummern"],
             "Buch": row["Buch"],
             "PostkartenNr": row["PostkartenNr"],
-            "URL": gen_url(row["Stichworte"]),
+            # "URL": gen_url(row["Stichworte"]),
         }
         list_of_cartoons.append(d)
 
