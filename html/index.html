@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="de">
+
+<head>
+    <title>Liste der Cartoons von Martin Perscheid</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Torben Menke">
+    <link rel="stylesheet" href="https://entorb.net/style.css" />
+    <script src="./tab.js"></script>
+    <script src="lib/jquery-3.5.0.min.js"></script>
+    <!-- Polyfiles for IE, suggested by Tabulator : http://tabulator.info/docs/4.6/browsers#ie -->
+    <script src="lib/tabulator-polyfill.min.js"></script>
+    <script src="lib/tabulator-fetch.umd.js"></script>
+    <!-- Tabulator -->
+    <link href="lib/tabulator.min.css" rel="stylesheet">
+    <script src="lib/tabulator-4.6.min.js"></script>
+</head>
+
+<h1>Liste der Cartoons von Martin Perscheid</h1>
+<p>
+    Komplette und durchsuchbare Liste aller Cartoons von Großmeister <a href="https://www.martin-perscheid.de"
+        target="_blank">Martin Perscheid</a>.
+    Diese Liste basiert auf seiner <a href="https://www.martin-perscheid.de/datenbank.html"
+        target="_blank">Datenbank</a>.
+    Auf dieser Seite werden keine seiner Werke gespeichert.
+    Ein Klick in der Tabelle öffnet eine Google Suche.
+</p>
+<p>
+    Ich freue mich über Verbesserungsvorschläge zu den Stichwörtern via <a
+        href="https://github.com/entorb/perscheid/blob/main/datenbank.json" target="_blank">GitHub Pull Request</a>.
+</p>
+<div id="table-perscheid"></div>
+<script>
+    // variables
+    const promises = []; // array of promises for async fetching
+    var table = defineTable();
+    promises.push(fetch_table_data_v2());
+    // Wait for all async promises to be done (all data is fetched)
+    // Promise.all(promises).then(function () {
+    //     table.setData(data);
+    // });
+</script>
+
+<hr>
+<a href="/">Home</a> - <a href="/contact.php?origin=Perscheid">Contact</a> - <a href="/impressum.php">Impressum</a>
+
+</body>
+
+</html>
