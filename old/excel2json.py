@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
-
 """
-reads excel file, exports as json list 
+Reads excel file, exports as json list.
 """
+import json
+import urllib.parse
 
 import openpyxl
-import urllib.parse
-import json
 
 file_excel = "datenbank.xlsx"
 file_json = "datenbank.json"
 
 workbook = openpyxl.load_workbook(
-    file_excel, data_only=True
+    file_excel,
+    data_only=True,
 )  # data_only : read values instead of formulas
 
 sheet = workbook["datenbank"]
@@ -54,22 +54,22 @@ def gen_url(text: str):
 list_of_cartoons = []
 
 row = 2
-id = 0
-while id != None:
-    id = sheet.cell(row=row, column=1).value
-    if id == None:
+my_id = 0
+while my_id is not None:
+    my_id = sheet.cell(row=row, column=1).value
+    if my_id is None:
         break
     text = sheet.cell(row=row, column=2).value
     url = gen_url(text)
     d = {
-        "Originalnummer": id,
+        "Originalnummer": my_id,
         "Stichworte": text,
         "A-Nummern": sheet.cell(row=row, column=3).value,
         "Buch": sheet.cell(row=row, column=4).value,
         "PostkartenNr": sheet.cell(row=row, column=5).value,
         "URL": url,
     }
-    if id != None:
+    if my_id is not None:
         list_of_cartoons.append(d)
 
     row += 1

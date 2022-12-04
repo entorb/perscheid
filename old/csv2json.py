@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
-
 """
-read csv file
+Read csv file.
+
 generate google search url
 export json
 """
-
 import csv
-import urllib.parse
 import json
+import urllib.parse
 
 # file_excel = "datenbank.xlsx"
 file_csv = "datenbank.tsv"
@@ -41,7 +40,7 @@ def gen_url(text: str):
 list_of_cartoons = []
 
 # note: utf-8-sig for UTF-8-BOM (as generated via Excel CSV export)
-with open(file_csv, mode="r", encoding="utf-8") as fh:
+with open(file_csv, encoding="utf-8") as fh:
     csv_reader = csv.DictReader(fh, dialect="excel", delimiter="\t")
     for row in csv_reader:
 
