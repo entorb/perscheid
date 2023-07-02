@@ -1,74 +1,115 @@
+/* eslint-disable camelcase */
+/* eslint-disable require-jsdoc */
+"use strict";
+
+// eslint-disable-next-line no-unused-vars
 function defineTable() {
-    var table = new Tabulator("#table-perscheid", {
-        height: 800, // set height of table to enable virtual DOM
-        layout: "fitColumns", //fit columns to width of table (optional)
-        // autoColumns: true, // very nice!!!
-        tooltipsHeader: true,
-        selectable: false,
-        columns: [ //Define Table Columns
-            // not using the checkbox column, as clicking the checkbox is not the same as clicking the row
-            // { formatter: "rowSelection", titleFormatter: "rowSelection", align: "center", headerSort: true },
-            { title: "Nr", field: "Originalnummer", sorter: "number", headerFilter: true, width: 100 },
-            { title: "A-Nr", field: "A-Nummern", sorter: "string", headerFilter: true, width: 100 },
-            { title: "Stichworte", field: "Stichworte", sorter: "string", headerFilter: true },
-            { title: "Buch", field: "Buch", sorter: "string", headerFilter: true, width: 100 },
-            { title: "Postkarten", field: "PostkartenNr", sorter: "string", headerFilter: true, width: 100 },
-        ],
-        rowClick: function (e, row) {
-            var rowData = row.getData();
-            if ('URL' in rowData === true) {
-                var activityUrl = rowData["URL"];
-                window.open(activityUrl);
-            }
-        },
-    });
+  const table = new Tabulator("#table-perscheid", {
+    height: 800, // set height of table to enable virtual DOM
+    layout: "fitColumns", // fit columns to width of table (optional)
+    // autoColumns: true, // very nice!!!
+    tooltipsHeader: true,
+    selectable: false,
+    columns: [
+      // Define Table Columns
+      // not using the checkbox column, as clicking the checkbox is not the same as clicking the row
+      // { formatter: "rowSelection", titleFormatter: "rowSelection", align: "center", headerSort: true },
+      {
+        field: "Originalnummer",
+        title: "Nr",
+        sorter: "number",
+        headerFilter: true,
+        width: 100,
+      },
+      {
+        field: "A-Nummern",
+        title: "A-Nr",
+        sorter: "string",
+        headerFilter: true,
+        width: 100,
+      },
+      {
+        field: "Stichworte",
+        title: "Stichworte",
+        sorter: "string",
+        headerFilter: true,
+      },
+      {
+        field: "Buch",
+        title: "Buch",
+        sorter: "string",
+        headerFilter: true,
+        width: 100,
+      },
+      {
+        field: "PostkartenNr",
+        title: "Postkarten",
+        sorter: "string",
+        headerFilter: true,
+        width: 100,
+      },
+    ],
+    rowClick: function (e, row) {
+      const rowData = row.getData();
+      if ("URL" in rowData === true) {
+        const activityUrl = rowData["URL"];
+        window.open(activityUrl);
+      }
+    },
+  });
 
-    table.setSort([
-        { column: "Originalnummer", dir: "desc" },
-    ]);
+  table.setSort([{ column: "Originalnummer", dir: "desc" }]);
 
-    return table;
+  return table;
 }
+const table = defineTable();
 
-// // ASync JQuery fetching
-// function fetch_table_data() {
-//     table.setData("./datenbank.json", {}, "get")
-// }
-
+// eslint-disable-next-line no-unused-vars
 function fetch_table_data_v2() {
-    const url =
-        "./datenbank.json";
-    return $.getJSON(url, function (data) {
-        console.log("fetching: success");
+  const url = "./datenbank.json";
+  return $.getJSON(url, function (data) {
+    console.log("fetching: success");
+  })
+    .done(function (data) {
+      console.log("fetching: done");
+
+      for (let i = 0; i < data.length; i++) {
+        const row = data[i];
+        let s = row["Stichworte"];
+
+        s = s.replace(/[\?\.,!\-\/\+&]/g, " ");
+        s = s.replace(/\s+/g, " ");
+        s = s.trim();
+
+        row["URL"] =
+          "https://www.google.de/search?q=Perscheid+" +
+          encodeURI(s) +
+          "&hl=de&tbm=isch";
+        data[i] = row;
+      }
+      table.setData(data);
     })
-        .done(function (data) {
-            console.log("fetching: done");
-
-            // console.log(my_array);
-            for (var i = 0; i < data.length; i++) {
-                var row = data[i];
-                let s = row["Stichworte"];
-
-                s = s.replace(/[\?\.,!\-\/\+&]/g, " ");
-                // s = s.replace("?", " ");
-                // s = s.replace(".", " ");
-                // s = s.replace(",", " ");
-                // s = s.replace("!", " ");
-                // s = s.replace("-", " ");
-                // s = s.replace("/", " ");
-                // s = s.replace("+", " ");
-                // s = s.replace("&", " ");
-                s = s.replace(/\s+/g, " ");
-                s = s.trim()
-
-                row["URL"] = "https://www.google.de/search?q=Perscheid+" + encodeURI(s) + "&hl=de&tbm=isch"
-                data[i] = row;
-                // console.log(row["URL"]);
-            }
-            table.setData(data);
-            // return data;
-        })
-        .fail(function () {
-            console.log("fetching: failed");
-        });
+    .fail(function () {
+      console.log("fetching: failed");
+    });
 }
+
+// array of promises for async fetching
+const promises = [];
+promises.push(fetch_table_data_v2());
+
+// add promise for tableBuilt event
+// requires Tabulator V5
+// promises.push(
+//   new Promise((resolve) => {
+//     table.on("tableBuilt", () => {
+//       console.log("tableBuilt");
+//       resolve();
+//     });
+//   })
+// );
+
+// Wait for all async promises to be done (all data is fetched)
+// Promise.all(promises).then(function () {
+//   table.setData(data);
+// });
