@@ -5,6 +5,9 @@ Read csv file.
 generate google search url
 export json
 """
+
+# ruff:noqa
+
 import csv
 import json
 import urllib.parse
@@ -43,7 +46,6 @@ list_of_cartoons = []
 with open(file_csv, encoding="utf-8") as fh:
     csv_reader = csv.DictReader(fh, dialect="excel", delimiter="\t")
     for row in csv_reader:
-
         d = {
             "Originalnummer": row["Originalnummer"],
             "Stichworte": row["Stichworte"],

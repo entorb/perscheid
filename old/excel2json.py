@@ -2,6 +2,9 @@
 """
 Reads excel file, exports as json list.
 """
+
+# ruff:noqa
+
 import json
 import urllib.parse
 
