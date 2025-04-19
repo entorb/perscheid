@@ -4,8 +4,6 @@
 #  pre-commit install
 # run manually
 #  pre-commit run --all-files
-# or
-#  pre-commit run --files myFile1.py myFile2.py
 # update hooks to latest version
 #  pre-commit autoupdate
 
@@ -19,7 +17,7 @@ exclude: |
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v5.0.0
     hooks:
       - id: check-added-large-files
         args: ["--maxkb=500"]
@@ -62,7 +60,7 @@ repos:
       - id: trailing-whitespace
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: "v0.4.2"
+    rev: "v0.11.6"
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
@@ -90,7 +88,7 @@ repos:
   #     - id: mypy
 
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.39.0
+    rev: v0.44.0
     hooks:
       - id: markdownlint
         args: ["--disable", "MD013"]
