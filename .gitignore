@@ -1,2 +1,4 @@
-datenbank.xlsx
 html/lib/
+
+.DS_Store
+datenbank.xlsx
