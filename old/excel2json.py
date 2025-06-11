@@ -1,20 +1,18 @@
-#!/usr/bin/env python3
 """
 Reads excel file, exports as json list.
-"""
-
-# ruff:noqa
+"""  # noqa: INP001
 
 import json
 import urllib.parse
+from pathlib import Path
 
 import openpyxl
 
-file_excel = "datenbank.xlsx"
-file_json = "datenbank.json"
+FILE_EXCEL = Path("datenbank.xlsx")
+FILE_JSON = Path("datenbank.json")
 
 workbook = openpyxl.load_workbook(
-    file_excel,
+    FILE_EXCEL,
     data_only=True,
 )  # data_only : read values instead of formulas
 
@@ -23,6 +21,7 @@ sheet = workbook["datenbank"]
 num_cols = 5
 
 # header
+# cspell:disable-next-line
 header = ("Originalnummer", "Stichworte", "A-Nummern", "Buch", "PostkartenNr")
 
 row = 1
@@ -30,10 +29,10 @@ row = 1
 for col in range(1, 1 + num_cols):
     cell = sheet.cell(row=row, column=col)  # index start here with 1
     # print(cell.value)
-    assert cell.value == header[col - 1]
+    assert cell.value == header[col - 1]  # noqa: S101
 
 
-def gen_url(text: str):
+def gen_url(text: str) -> str:  # noqa: D103
     s = text
     s = s.replace("?", " ")
     s = s.replace(".", " ")
@@ -62,15 +61,17 @@ while my_id is not None:
     my_id = sheet.cell(row=row, column=1).value
     if my_id is None:
         break
-    text = sheet.cell(row=row, column=2).value
+    text = str(sheet.cell(row=row, column=2).value)
     url = gen_url(text)
     d = {
+        # cspell:disable
         "Originalnummer": my_id,
         "Stichworte": text,
         "A-Nummern": sheet.cell(row=row, column=3).value,
         "Buch": sheet.cell(row=row, column=4).value,
         "PostkartenNr": sheet.cell(row=row, column=5).value,
         "URL": url,
+        # cspell:enable
     }
     if my_id is not None:
         list_of_cartoons.append(d)
@@ -78,5 +79,5 @@ while my_id is not None:
     row += 1
 
 
-with open(file_json, mode="w", encoding="utf-8", newline="\n") as fh:
+with FILE_JSON.open(mode="w", encoding="utf-8", newline="\n") as fh:
     json.dump(list_of_cartoons, fh, ensure_ascii=False, sort_keys=False, indent=1)
