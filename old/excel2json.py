@@ -29,7 +29,7 @@ row = 1
 for col in range(1, 1 + num_cols):
     cell = sheet.cell(row=row, column=col)  # index start here with 1
     # print(cell.value)
-    assert cell.value == header[col - 1]  # noqa: S101
+    assert cell.value == header[col - 1]
 
 
 def gen_url(text: str) -> str:  # noqa: D103
